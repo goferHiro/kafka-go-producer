@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 	"strconv"
 	"time"
 
@@ -87,10 +88,10 @@ func write(url string, topic string, dialer *kafka.Dialer) {
 }
 
 func StartKafka(topic, clientID string) {
-	url := "pkc-ymrq7.us-east-2.aws.confluent.cloud:9092"
+	url :=os.Getenv("bootstrap_servers")
 
-	username := "YGNDSDHF6KGOMJQX"
-	password := "eWt0ut+fpGlffp+5leVRlHDAco87z10WhwUnq9uUmVgsUDY3MbQnFCQ++2j/reiq"
+	username := os.Getenv("username")
+	password := os.Getenv("pass")
 	dialer := newDialer(clientID, username, password)
 	ctx := context.Background()
 	// createTopic(url, topic, dialer)
@@ -99,7 +100,7 @@ func StartKafka(topic, clientID string) {
 }
 
 func main() {
-	topic := "kafka-go"
+	topic := os.Getenv("topic")
 	clientID := "g1"
 	StartKafka(topic, clientID)
 }

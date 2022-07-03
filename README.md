@@ -11,7 +11,7 @@ A minimalistic Kafka go producer for  local and cloud hosted kafka servers.
 
 1. Kafka server 
     1. Topic 
-    2. Hosted - localhost/IaaS (Infrastructure as Service)
+    2. Hosted - localhost/SaaS (Software as Service)
 2. Go 
 
 ## Usage
