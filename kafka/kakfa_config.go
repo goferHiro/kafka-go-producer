@@ -77,31 +77,45 @@ func newWriter(url string, topic string, dialer *kafka.Dialer) *kafka.Writer {
 func write(url string, topic string, dialer *kafka.Dialer) {
 	writer := newWriter(url, topic, dialer)
 	defer writer.Close()
-	for i := 0; ; i++ {
+	for i := 0; i < 1000000; i++ {
 		v := []byte("V" + strconv.Itoa(i))
 		log.Printf("send:\t%s\n", v)
-		msg := kafka.Message{Key: v, Value: v}
+		msg := kafka.Message{Key: []byte("testing"), Value: v}
 		err := writer.WriteMessages(context.Background(), msg)
 		try(err, nil)
-		time.Sleep(100 * time.Millisecond)
+
+		// go func(msg kafka.Message) {
+		// 	err := writer.WriteMessages(context.Background(), msg)
+		// 	try(err, nil)
+		// }(msg)
+
+    
+		// time.Sleep(100 * time.Millisecond)
 	}
 }
 
 func StartKafka(topic, clientID string) {
-	url :=os.Getenv("bootstrap_servers")
+	url := os.Getenv("bootstrap_servers")
 
 	username := os.Getenv("username")
 	password := os.Getenv("pass")
-	dialer := newDialer(clientID, username, password)
-	ctx := context.Background()
-	// createTopic(url, topic, dialer)
-	go write(url, topic, dialer)
-	<-ctx.Done()
+  
+	// dialer := newDialer(clientID, username, password)
+	// // createTopic(url, topic, dialer)
+	// go write(url, topic, dialer)
+	// dialer2 := newDialer(clientID+"12", username, password)
+ //  go write (url,topic,dialer2)
+
+
+  for i:=0;i<200;i++{
+    dialerN := newDialer(strconv.Itoa(i),username,password) //clientID is for us...they are creating a unique clientID in their end regardless of clien
+    go write(url,topic,dialerN)
+  }
 }
 
 func main() {
 	topic := os.Getenv("topic")
-	clientID := "g1"
+	clientID := "testing-refl"
 	StartKafka(topic, clientID)
 }
 

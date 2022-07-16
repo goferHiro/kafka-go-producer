@@ -14,7 +14,7 @@ func main() {
 	defer fmt.Println("Producer is stopped!")
 
 	appKafka.StartKafka(topic, clientID)
-	runtime := 10 * time.Minute
+	runtime := 100 * time.Minute
 	fmt.Println("Will be running for next ", runtime)
 	time.Sleep(runtime)
 }
